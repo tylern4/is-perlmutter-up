@@ -1,0 +1,5 @@
+flask
+gunicorn
+jinja2
+emoji
+requests
