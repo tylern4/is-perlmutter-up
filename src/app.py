@@ -21,13 +21,16 @@ app = create_app()
 
 
 def get_perlmutter_status_title(name: str = "perlmutter"):
-    print(f"###### {name}  ######", flush=True)
+    app.logger.info(name)
+    if name == 'favicon.ico':
+        return None
+
     respose = requests.get(f'https://api.nersc.gov/api/v1.2/status/{name}',
                            headers={'accept': 'application/json'})
 
-    # app.logger.info(respose.text)
-    print(f"###### respose.text = {respose.text}", flush=True)
+    app.logger.info(respose.text)
     data = json.loads(respose.text)
+    app.logger.debug(data)
 
     return {
         'active': data['status'],
@@ -78,8 +81,10 @@ bad_emoji = [':thumbs_down:',
 @app.route('/', defaults={'name': 'perlmutter'})
 @app.route('/<path:name>')
 def home(name):
+    if name == 'favicon.ico':
+        return render_template("home.html")
     status = get_perlmutter_status_title(name)
-    if status['active']:
+    if 'active' in status and status['active']:
         color = "MediumSeaGreen"
         emoji = random.choice(good_emoji)
         notes = ""
@@ -97,6 +102,7 @@ def home(name):
         color=color,
         title=title,
     )
+
 
 
 if __name__ == "__main__":
