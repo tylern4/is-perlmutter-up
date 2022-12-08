@@ -33,7 +33,8 @@ def get_perlmutter_status_title(name: str = "perlmutter"):
     app.logger.debug(data)
 
     return {
-        'active': data['status'],
+        'active': (data['status'] == 'active'),
+        'description': data['description'],
         'notes': data['notes']
     }
 
@@ -85,10 +86,16 @@ def home(name):
         return render_template("home.html")
     status = get_perlmutter_status_title(name)
     if 'active' in status and status['active']:
-        color = "MediumSeaGreen"
-        emoji = random.choice(good_emoji)
-        notes = ""
-        title = f"YES! {name} is up!"
+        if status['description'] == "System Degraded":
+            color = "Coral"
+            emoji = random.choice(good_emoji)
+            notes = status['notes']
+            title = f"Maybe? {name} is degraded."
+        else:
+            color = "MediumSeaGreen"
+            emoji = random.choice(good_emoji)
+            notes = ""
+            title = f"YES! {name} is up!"
     else:
         color = "#A93226"
         emoji = random.choice(bad_emoji)
@@ -102,7 +109,6 @@ def home(name):
         color=color,
         title=title,
     )
-
 
 
 if __name__ == "__main__":
