@@ -17,7 +17,7 @@
 .center-top {
     position: fixed;
     left: 50%;
-    top: 20px;
+    top: 75px;
     transform: translate(-50%, -50%);
     margin: 0 auto;
 }
