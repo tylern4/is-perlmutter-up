@@ -1,5 +1,5 @@
 # Gunicorn config variables
-loglevel = 'warning'
+loglevel = 'debug'
 errorlog = "-"  # stderr
 accesslog = "-"  # stdout
 worker_tmp_dir = "/dev/shm"
